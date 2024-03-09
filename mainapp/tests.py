@@ -45,7 +45,7 @@ class MainAppTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.data["error"],
-            "Subscription date cannot be older than current time.",
+            "start date cannot be older than current time.",
         )
 
     def test_logout(self):
