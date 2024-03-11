@@ -1,6 +1,7 @@
-from datetime import timedelta, timezone
+from datetime import timedelta
 
 from django.contrib.auth.password_validation import validate_password
+from django.utils import timezone
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
@@ -46,8 +47,8 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         tenminearly = timezone.now() - timedelta(minutes=10)
-        if data["subscription_start_date"] > tenminearly:
+        if data["subscription_start_date"] < tenminearly:
             raise serializers.ValidationError(
                 "Subscription date cannot be older past"
-                )
+            )
         return data
