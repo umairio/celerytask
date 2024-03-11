@@ -5,6 +5,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
+# from .tasks import populate_users_profiles
 from .models import Profile, User
 from .serializers import ProfileSerializer, RegisterSerializer
 
