@@ -41,14 +41,18 @@ class RegisterSerializer(serializers.ModelSerializer):
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    subscription_start_date = serializers.DateTimeField(
+        format="%Y-%m-%d %H:%M:%S"
+    )
+
     class Meta:
         model = Profile
         fields = "__all__"
 
     def validate(self, data):
-        tenminearly = timezone.now() - timedelta(minutes=10)
-        if data["subscription_start_date"] < tenminearly:
+        ten_min_early = timezone.now() - timedelta(minutes=10)
+        if data["subscription_start_date"] < ten_min_early:
             raise serializers.ValidationError(
-                "Subscription date cannot be older past"
+                "Subscription date cannot be older than the current time."
             )
         return data

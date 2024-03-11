@@ -1,15 +1,12 @@
-from datetime import datetime, timedelta
-
-from django.shortcuts import render
-from django.utils import timezone
+from django.shortcuts import get_object_or_404, render
 from rest_framework import generics, status
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from .models import User
-from .serializers import RegisterSerializer
+from .models import Profile, User
+from .serializers import ProfileSerializer, RegisterSerializer
 
 
 class RegisterView(generics.CreateAPIView):
@@ -44,33 +41,12 @@ class SubscriptionUpdateView(generics.UpdateAPIView):
     permission_classes = (IsAuthenticated,)
 
     def patch(self, request):
-        profile = request.user.profile
-        sub_start_date = request.data.get("subscription_start_date")
-        try:
-            sub_start_date = datetime.strptime(sub_start_date,
-                                               "%Y-%m-%d %H:%M:%S")
-        except ValueError:
-            sub_start_date = datetime.strptime(sub_start_date,
-                                               "%Y-%m-%d %H:%M:%S.%f")
-        sub_start_date = timezone.make_aware(sub_start_date)
-        tenminearly = timezone.now() - timedelta(minutes=10)
-        if sub_start_date > tenminearly:
-            profile.subscription_start_date = sub_start_date
-            profile.subscription_end_date = (
-                profile.subscription_start_date + timedelta(
-                    hours=1
-                )
-            )
-            profile.save()
-            return Response(
-                {"message": "Subscription updated successfully."},
-                status=status.HTTP_200_OK,
-            )
-        else:
-            return Response(
-                {"error": "start date cannot be older than current time."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        profile = get_object_or_404(Profile, user=request.user)
+        serializer = ProfileSerializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 def index(request):

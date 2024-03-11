@@ -21,7 +21,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = "django-insecure-dad&3i!l(cyap0d+(9$l6kvnvgyt&n%c!7ewtlhi)7vcv5slbw"
+SECRET_KEY = (
+    "django-insecure-dad&3i!l(cyap0d+(9$l6kvnvgyt&n%c!7ewtlhi)7vcv5slbw"
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -147,7 +149,6 @@ CELERY_BROKER_URL = "redis://127.0.0.1:6379"
 CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_TASK_SERIALIZER = "json"
-CELERY_TIMEZONE = "Asia/Karachi"
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_CACHE_BACKEND = "default"
 
@@ -155,16 +156,6 @@ CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
         "LOCATION": "my_cache_table",
-    }
-}
-
-# celery beat
-
-CELERY_BEAT_SCHEDULE = {
-    "every-10-minutes": {
-        "task": "mainapp.tasks.update_subscription_time",
-        # for every ten minutes 60s*10m
-        "schedule": 600,
     }
 }
 
