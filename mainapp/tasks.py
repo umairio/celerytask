@@ -35,7 +35,7 @@ def populate_users_profiles(self):
 @shared_task(bind=True)
 def update_subscription_time(self):
 
-    profiles = Profile.objects.filter(subscription_end_date__gt=timezone.now())
+    profiles = Profile.objects.filter(subscription_end_date__lt=timezone.now())
     profiles.update(
         subscription_start_date=timezone.now(),
         subscription_end_date=timezone.now() + timedelta(hours=1),

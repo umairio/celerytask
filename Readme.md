@@ -27,14 +27,21 @@ To store environment-specific settings, create a `.env` file in the root directo
 
 ```env
 DEBUG=True
-SECRET_KEY=GENERATE_YOUR_OWN_SECRET_KEY
+SECRET_KEY=<your-generated-secret-key>  # Update with a secure key
 CELERY_BROKER=redis://redis:6379/0
 CELERY_BACKEND=redis://redis:6379/0
+POSTGRES_USER=<your-postgres-username>
+POSTGRES_PASSWORD=<your-postgres-password>
+POSTGRES_DB=<your-postgres-database-name>
+DB_HOST=db
+DB_PORT=5432
 ```
 
 - **DEBUG**: Set to `True` for development. Change to `False` for production.
 - **SECRET_KEY**: This must be a secure, unique, random string. Use a Django tool or an online generator to create a secret key.
 - **CELERY_BROKER** and **CELERY_BACKEND**: Both point to the Redis service in Docker.
+- **POSTGRES_USER**, **POSTGRES_PASSWORD**, and **POSTGRES_DB**: These are used to configure the PostgreSQL database in Docker.
+- **DB_HOST** and **DB_PORT**: These are used to configure the PostgreSQL database in Docker.
 
 **To generate a secure `SECRET_KEY` for Django**, you can run the following command in a Django shell:
 ```bash
