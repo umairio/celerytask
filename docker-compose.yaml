@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+
+
+  redis:
+      image: redis:7-alpine
+
+
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+  
+
+  celery:
+    build: .
+    volumes:
+      - .:/app
+    command: celery -A django_celery_project worker -l info
+    env_file:
+      - .env
+    depends_on:
+      - redis
+
+
+  celery-beat:
+    build: .
+    volumes:
+      - .:/app
+    command: ./start_celery_beat.sh
+    env_file:
+      - .env
+    depends_on:
+      - redis
