@@ -35,6 +35,10 @@ jobs:
       DB_HOST: "localhost"
       SECRET_KEY: "django-insecure-dad&3i!l(cyap0d+(9$l6kvnvgyt&n%c!7ewtlhi)7vcv5slbw"
       DEBUG: "True"
+      DB_NAME: "appdb"
+      DB_USER: "umair"
+      DB_PASSWORD: "umair"
+      DB_PORT: "5432"
 
     steps:
     - name: Checkout repository

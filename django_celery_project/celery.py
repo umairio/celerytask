@@ -27,5 +27,4 @@ app.conf.beat_schedule = {
         "schedule": 600,
     }
 }
-
 app.autodiscover_tasks()
