@@ -12,7 +12,6 @@ app = Celery("django_celery_project")
 app.conf.enable_utc = False
 app.config_from_object(settings, namespace="CELERY")
 app.conf.beat_schedule = {}
-app.autodiscover_tasks()
 
 
 @app.task(bind=True)
@@ -28,3 +27,4 @@ app.conf.beat_schedule = {
         "schedule": 600,
     }
 }
+app.autodiscover_tasks()

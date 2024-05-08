@@ -1,0 +1,53 @@
+version: '3.8'
+services:
+
+  db:
+    container_name: db
+    image: postgres:15
+    restart: always
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER
+      - POSTGRES_PASSWORD
+      - POSTGRES_DB
+
+  redis:
+    image: redis:7-alpine
+
+  web:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+
+  worker:
+    build: .
+    volumes:
+      - .:/app
+    command: celery -A django_celery_project worker -l info
+    depends_on:
+      - db
+      - redis
+
+  beat:
+    build: .
+    volumes:
+      - .:/app
+    command: ./start_celery_beat.sh
+    env_file:
+      - .env
+    depends_on:
+      - db
+      - redis
+
+volumes:
+  postgres_data:
