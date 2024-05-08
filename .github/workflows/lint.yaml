@@ -1,34 +1,50 @@
-name: Python Code Quality
+name: Python Linting and Testing
 
 on:
   push:
     branches:
       - '*'
-  pull_request:
-    branches:
-      - '*'
 
 jobs:
-  lint_and_test:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.10'
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
 
-    - name: Set up 
-      run: pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-    - name: Run Flake8
-      run: flake8 .
+      - name: Run Flake8
+        run: flake8 .
 
-    - name: Run isort
-      run: isort .
+      - name: Run isort
+        run: isort --check-only .
 
-    - name: Run Django tests
-      run: python manage.py test
+  test:
+    runs-on: ubuntu-latest
+
+    env:
+      SECRET_KEY: 'django-insecure-dad&3i!l(cyap0d+(9$l6kvnvgyt&n%c!7ewtlhi)7vcv5slbw'  # Use a strong, unique secret key
+      DEBUG: False 
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run Django tests
+        run: python manage.py test
